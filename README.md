@@ -23,7 +23,7 @@ _Touch ready_, of course.
 
 **.less file**
 
-```css
+```less
 .hoverspin {
     position: relative;
     overflow: hidden;
