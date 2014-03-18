@@ -1,0 +1,20 @@
+{
+  "name": "jquery-hoverspin",
+  "version": "1.0.0",
+  "homepage": "https://github.com/basilico/jquery-hoverspin",
+  "authors": [
+    "dharma <dharma@basili.co>"
+  ],
+  "description": "Spins 360° images",
+  "main": "jquery.hoverspin.js",
+  "keywords": [
+    "360",
+    "vr",
+    "touch",
+    "desktop"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "jquery": ">= 1.7"
+  }
+}
