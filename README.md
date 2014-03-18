@@ -27,7 +27,7 @@ _Touch ready_, of course.
 .hoverspin {
     position: relative;
     overflow: hidden;
-    <!-- Adjust to your needs -->
+    // Adjust to your needs
     height: 100px;
     width: 100px;
 
