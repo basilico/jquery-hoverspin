@@ -1,7 +1,7 @@
 jQuery Hoverspin
 ================
 
-Spins 360° images since 3 september 2013.  
+Spins 360° images since 3 september 2013.
 This plugin aims to help the rendering and handling of 360 vr objects in a browser environment.
 
 _Touch ready_, of course.
@@ -52,14 +52,17 @@ Hoverspin ships with a base set of settings (almost self-explanatory) extensible
 
 ```js
 var settings = {
-    // Number of animation frames (9 frames equals a 40° degrees movement)
-    frames: 9,
-    // Number of times the animation should repeat
-    loops: 1,
-    // If print useful debug markup
-    debug: false,
-    // The *REAL* container identifier
-    container: '.container'
+  // Number of animation frames of a full axial revolution
+  // For instance: 9 frames equals to 40° movement per picture
+  frames: 9,
+  // Number of times the revolution should repeat throughout an edge-to-edge swipe
+  loops: 1,
+  // Display useful debug markup
+  debug: false,
+  // The fixed container (will be removed in the near future)
+  container: '.container',
+  // Whether to avoid page scroll on touch devices while spinning
+  disableTouchPropagation: true
 };
 ```
 

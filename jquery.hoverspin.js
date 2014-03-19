@@ -1,25 +1,28 @@
 /**
- * jquery.hoverSpin.js
+ * jquery.hoverspin.js
+ *
+ * Rotate images since 09/03/13 w/ http://basili.co
  *
  * Author: Dharma Ferrari (@dharmastyle)
+ * Author: Marco Bozzola (@bozma88)
  *
- * rotate images since 09/03/13 w/ http://basili.co
- * thanks @a2co_utd for the first proto
- *
- * @TODO: add click and drag
+ * Thanks @a2co_utd for the first proto!
  */
 ;(function( $ ) {
 
   // Default options
   var settings = {
-    // Number of animation frames (9 frames equals a 40° degrees movement)
+    // Number of animation frames of a full axial revolution
+    // For instance: 9 frames equals to 40° movement per picture
     frames: 9,
-    // Number of times the animation should repeat
+    // Number of times the revolution should repeat throughout an edge-to-edge swipe
     loops: 1,
-    // If print useful debug markup
+    // Display useful debug markup
     debug: false,
-    // The *REAL* container identifier
-    container: '.container'
+    // The fixed container (will be removed in the near future)
+    container: '.container',
+    // Whether to avoid page scroll ON touch devices while spinning
+    disableTouchPropagation: true
   };
 
   // Plugin constructor
@@ -32,17 +35,30 @@
       this.settings = $.extend({}, settings, options, $this.data());
 
       // Properties
-      this.$ = $this;
       this.$container = $this.closest( this.settings.container );
+      this.$spriteWrapper = $this;
+      this.$sprites = $this.children();
+      this.$firstSprite = this.$sprites.filter(":first");
       this.currentStep = 1;
       this.currentFrame = 1;
       this.offset = 0;
+      this.isMultiframe = this.$sprites.length > 1;
 
       // Methods
-
       this.goToFrame = function(frame) {
-        var goTo = (frame-1) * 100;
-        this.$.css('top','-'+goTo+'%');
+        var
+          $target,
+          property,
+          goTo = (frame-1) * 100;
+
+        if (this.isMultiframe) {
+          $target = this.$firstSprite;
+          property = 'marginTop';
+        } else {
+          $target = this.$spriteWrapper;
+          property = 'top';
+        }
+        $target.css(property, '-'+goTo+'%');
       };
 
       this.calculateFrameByStep = function(step) {
@@ -71,7 +87,7 @@
       };
 
       this.calculateStepWidth = function() {
-        return this.$.width() / this.getTotalSteps();
+        return this.$spriteWrapper.width() / this.getTotalSteps();
       };
 
       this.calculateLoopByStep = function(step) {
@@ -95,7 +111,7 @@
       };
       this.setCurrentStep = function(step) {
         if(this.settings.debug) {
-          this.$.parent().find('.hoverspin-debug-active').removeClass('hoverspin-debug-active');
+          this.$spriteWrapper.parent().find('.hoverspin-debug-active').removeClass('hoverspin-debug-active');
           $('#'+this.id+step).addClass('hoverspin-debug-active');
         }
         this.currentStep = step;
@@ -124,9 +140,13 @@
         var
           step = this.calculateCurrentStep(event) + this.getOffset(),
           frame = this.calculateFrameByStep(step);
+        if (frame == this.getCurrentFrame()) { return; }
         this.setCurrentStep(step);
         this.setCurrentFrame(frame);
         this.goToFrame(frame);
+        if (this.settings.disableTouchPropagation) {
+          event.preventDefault();
+        }
       };
 
       this._leave = function(event) {
@@ -156,7 +176,7 @@
         appendDebugStyle();
         for(var i=0; i<this.getTotalSteps(); i++){
           var step = i+1;
-          this.$.closest('.application-content').append(
+          this.$spriteWrapper.closest('.application-content').append(
             '<div id="'+ this.id+step +'" class="hoverspin-debug-step" style="width:'+(this.calculateStepWidth()-1)+'px; left:'+(this.calculateStepWidth()*i)+'px;">' +
               this.calculateFrameByStep(step) +
             '</div>'
